@@ -9,11 +9,7 @@ Here's how to set up and run your AI Resume Maker application:
 
 ## Setup Instructions
 
-### 1. Clone the repository (if using GitHub)
-```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
-```
+### 1. Clone the repository 
 
 ### 2. Install dependencies
 ```bash
