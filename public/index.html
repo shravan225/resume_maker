@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume Maker</title>
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+      --light-color: #ecf0f1;
+      --dark-color: #2c3e50;
+      --success-color: #2ecc71;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f7fa;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    .resume-form {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .form-section {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 20px;
+    }
+    
+    .form-section:last-child {
+      border-bottom: none;
+    }
+    
+    .form-section h2 {
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .form-section h2 i {
+      margin-right: 10px;
+      color: var(--primary-color);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .form-col {
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .btn {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #2980b9;
+    }
+    
+    .btn-secondary {
+      background-color: #95a5a6;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #7f8c8d;
+    }
+    
+    .btn-success {
+      background-color: var(--success-color);
+    }
+    
+    .btn-success:hover {
+      background-color: #27ae60;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .dynamic-list {
+      margin-top: 20px;
+    }
+    
+    .list-item {
+      background-color: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+    
+    .list-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .list-item-title {
+      font-weight: 600;
+      color: var(--secondary-color);
+    }
+    
+    .list-item-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .list-item-btn {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    .list-item-btn.delete {
+      color: var(--accent-color);
+    }
+    
+    /* Simplified Skills Section */
+    .skills-input-container {
+      margin-bottom: 20px;
+    }
+    
+    #skillsInput {
+      min-height: 80px;
+    }
+    
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    
+    .skill-tag {
+      background-color: var(--light-color);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .skill-tag-remove {
+      margin-left: 5px;
+      cursor: pointer;
+      color: #777;
+    }
+    
+    a[href^="http"] {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+    
+    a[href^="http"]:hover {
+      text-decoration: underline;
+    }
+    
+    .preview-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-top: 30px;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+    
+    .tab.active {
+      border-bottom-color: var(--primary-color);
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .progress-container {
+      width: 100%;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    
+    .progress-bar {
+      height: 10px;
+      background-color: var(--primary-color);
+      border-radius: 5px;
+      width: 0%;
+      transition: width 0.5s;
+    }
+    
+    .progress-text {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+      }
+      
+      .form-col {
+        width: 100%;
+      }
+      
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      .tabs {
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>AI Resume Maker</h1>
+      <p>Create professional resumes with AI enhancements</p>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">0% Complete</div>
+    
+    <div class="tabs">
+      <div class="tab active" data-tab="personal">Personal Info</div>
+      <div class="tab" data-tab="skills">Skills</div>
+      <div class="tab" data-tab="experience">Experience</div>
+      <div class="tab" data-tab="education">Education</div>
+      <div class="tab" data-tab="projects">Projects</div>
+      <div class="tab" data-tab="other">Other</div>
+    </div>
+    
+    <form id="resumeForm" class="resume-form">
+      <!-- Personal Info Tab -->
+      <div class="tab-content active" id="personal-tab">
+        <div class="form-section">
+          <h2><i class="fas fa-user"></i> Personal Information</h2>
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label for="name">Full Name*</label>
+                <input type="text" id="name" name="name" required>
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group">
+                <label for="email">Email*</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone">
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label for="linkedin">LinkedIn Profile</label>
+                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourname">
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group">
+                <label for="github">GitHub Profile</label>
+                <input type="url" id="github" name="github" placeholder="https://github.com/yourusername">
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label for="portfolio">Portfolio Website</label>
+                <input type="url" id="portfolio" name="portfolio" placeholder="https://yourportfolio.com">
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group">
+                <label for="currentRole">Current Role/Title</label>
+                <input type="text" id="currentRole" name="currentRole" placeholder="e.g., Software Engineer">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <h2><i class="fas fa-bullseye"></i> Career Objective</h2>
+          <div class="form-group">
+            <label for="careerObjective">Professional Summary</label>
+            <textarea id="careerObjective" name="careerObjective" placeholder="Briefly describe your professional goals and qualifications"></textarea>
+          </div>
+        </div>
+        
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" id="prevBtn" disabled>Previous</button>
+          <button type="button" class="btn btn-primary" id="nextBtn">Next: Skills</button>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="skills-tab">
+        <div class="form-section">
+          <h2><i class="fas fa-code"></i> Skills</h2>
+          
+          <div class="form-group">
+            <label for="skillsInput">Enter your skills (comma separated)</label>
+            <textarea 
+              id="skillsInput" 
+              name="skills" 
+              placeholder="e.g., Python, Machine Learning, React, SQL, Data Analysis"
+            ></textarea>
+            <div class="skill-tags" id="skillsTags"></div>
+          </div>
+        </div>
+        
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" id="prevBtnSkills">Previous</button>
+          <button type="button" class="btn btn-primary" id="nextBtnSkills">Next: Experience</button>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="experience-tab">
+        <div class="form-section">
+          <h2><i class="fas fa-briefcase"></i> Work Experience</h2>
+          
+          <div id="experienceList" class="dynamic-list"></div>
+          
+          <button type="button" class="btn btn-secondary" id="addExperience">Add Experience</button>
+        </div>
+        
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" id="prevBtnExperience">Previous</button>
+          <button type="button" class="btn btn-primary" id="nextBtnExperience">Next: Education</button>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="education-tab">
+        <div class="form-section">
+          <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+          
+          <div id="educationList" class="dynamic-list"></div>
+          
+          <button type="button" class="btn btn-secondary" id="addEducation">Add Education</button>
+        </div>
+        
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" id="prevBtnEducation">Previous</button>
+          <button type="button" class="btn btn-primary" id="nextBtnEducation">Next: Projects</button>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="projects-tab">
+        <div class="form-section">
+          <h2><i class="fas fa-project-diagram"></i> Projects</h2>
+          
+          <div id="projectList" class="dynamic-list"></div>
+          
+          <button type="button" class="btn btn-secondary" id="addProject">Add Project</button>
+        </div>
+        
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" id="prevBtnProjects">Previous</button>
+          <button type="button" class="btn btn-primary" id="nextBtnProjects">Next: Other</button>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="other-tab">
+        <div class="form-section">
+          <h2><i class="fas fa-certificate"></i> Certifications</h2>
+          
+          <div id="certificationList" class="dynamic-list"></div>
+          
+          <button type="button" class="btn btn-secondary" id="addCertification">Add Certification</button>
+        </div>
+        
+        <div class="form-section">
+          <h2><i class="fas fa-trophy"></i> Achievements</h2>
+          
+          <div id="achievementList" class="dynamic-list"></div>
+          
+          <button type="button" class="btn btn-secondary" id="addAchievement">Add Achievement</button>
+        </div>
+        
+        <div class="form-section">
+          <h2><i class="fas fa-language"></i> Languages</h2>
+          
+          <div id="languageList" class="dynamic-list"></div>
+          
+          <button type="button" class="btn btn-secondary" id="addLanguage">Add Language</button>
+        </div>
+        
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" id="prevBtnOther">Previous</button>
+          <button type="button" class="btn btn-success" id="generateResume">Generate Resume</button>
+        </div>
+      </div>
+    </form>
+    
+    <div id="previewContainer" class="preview-container hidden">
+      <h2>Your Resume Preview</h2>
+      <div id="resumePreview"></div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" id="editResume">Edit Resume</button>
+        <button type="button" class="btn btn-primary" id="downloadResume">Download PDF</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.tab');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabId = tab.getAttribute('data-tab');
+          
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          tabContents.forEach(content => {
+            content.classList.remove('active');
+            if (content.id === `${tabId}-tab`) {
+              content.classList.add('active');
+            }
+          });
+          
+          updateProgress();
+        });
+      });
+      
+      const nextBtns = document.querySelectorAll('[id^="nextBtn"]');
+      const prevBtns = document.querySelectorAll('[id^="prevBtn"]');
+      
+      nextBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const currentTab = btn.closest('.tab-content');
+          const nextTabId = currentTab.id.replace('-tab', '').replace('nextBtn', '');
+          const nextTab = document.querySelector(`[data-tab="${nextTabId}"]`);
+          
+          if (nextTab) {
+            nextTab.click();
+          }
+        });
+      });
+      
+      prevBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const currentTab = btn.closest('.tab-content');
+          const prevTabId = currentTab.id.replace('-tab', '').replace('prevBtn', '');
+          const prevTab = document.querySelector(`[data-tab="${prevTabId}"]`);
+          
+          if (prevTab) {
+            prevTab.click();
+          }
+        });
+      });
+      
+      const skillsInput = document.getElementById('skillsInput');
+      const skillsTags = document.getElementById('skillsTags');
+      
+      skillsInput.addEventListener('input', function() {
+        updateSkillsTags();
+      });
+      
+      function updateSkillsTags() {
+        const skills = skillsInput.value.split(',')
+          .map(skill => skill.trim())
+          .filter(skill => skill);
+        
+        skillsTags.innerHTML = skills.map(skill => `
+          <div class="skill-tag">
+            ${skill}
+            <span class="skill-tag-remove" data-skill="${skill}">&times;</span>
+          </div>
+        `).join('');
+        
+        document.querySelectorAll('.skill-tag-remove').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const skillToRemove = this.getAttribute('data-skill');
+            const currentSkills = skillsInput.value.split(',')
+              .map(s => s.trim())
+              .filter(s => s && s !== skillToRemove);
+            
+            skillsInput.value = currentSkills.join(', ');
+            updateSkillsTags();
+            updateProgress();
+          });
+        });
+      }
+      
+      const listTypes = ['experience', 'education', 'project', 'certification', 'achievement', 'language'];
+      
+      listTypes.forEach(type => {
+        const addButton = document.getElementById(`add${type.charAt(0).toUpperCase() + type.slice(1)}`);
+        const listContainer = document.getElementById(`${type}List`);
+        
+        addButton.addEventListener('click', () => {
+          addListItem(listContainer, type);
+        });
+      });
+      
+      function addListItem(container, type) {
+        const itemId = Date.now();
+        const item = document.createElement('div');
+        item.className = 'list-item';
+        item.dataset.id = itemId;
+        
+        let itemContent = '';
+        
+        switch(type) {
+          case 'experience':
+            itemContent = `
+              <div class="list-item-header">
+                <div class="list-item-title">New Experience</div>
+                <div class="list-item-actions">
+                  <button type="button" class="list-item-btn edit"><i class="fas fa-edit"></i></button>
+                  <button type="button" class="list-item-btn delete"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="list-item-form hidden">
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="expPosition_${itemId}">Position*</label>
+                      <input type="text" id="expPosition_${itemId}" name="expPosition_${itemId}" required>
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="expCompany_${itemId}">Company*</label>
+                      <input type="text" id="expCompany_${itemId}" name="expCompany_${itemId}" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="expStartDate_${itemId}">Start Date*</label>
+                      <input type="month" id="expStartDate_${itemId}" name="expStartDate_${itemId}" required>
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="expEndDate_${itemId}">End Date (or Present)</label>
+                      <input type="month" id="expEndDate_${itemId}" name="expEndDate_${itemId}">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="expLocation_${itemId}">Location</label>
+                  <input type="text" id="expLocation_${itemId}" name="expLocation_${itemId}">
+                </div>
+                <div class="form-group">
+                  <label for="expResponsibilities_${itemId}">Responsibilities (one per line)</label>
+                  <textarea id="expResponsibilities_${itemId}" name="expResponsibilities_${itemId}" rows="4"></textarea>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
+                  <button type="button" class="btn btn-primary save-edit">Save</button>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'education':
+            itemContent = `
+              <div class="list-item-header">
+                <div class="list-item-title">New Education</div>
+                <div class="list-item-actions">
+                  <button type="button" class="list-item-btn edit"><i class="fas fa-edit"></i></button>
+                  <button type="button" class="list-item-btn delete"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="list-item-form hidden">
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="eduDegree_${itemId}">Degree*</label>
+                      <input type="text" id="eduDegree_${itemId}" name="eduDegree_${itemId}" required>
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="eduInstitution_${itemId}">Institution*</label>
+                      <input type="text" id="eduInstitution_${itemId}" name="eduInstitution_${itemId}" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="eduYear_${itemId}">Year*</label>
+                      <input type="text" id="eduYear_${itemId}" name="eduYear_${itemId}" placeholder="e.g., 2018 - 2022" required>
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="eduLocation_${itemId}">Location</label>
+                      <input type="text" id="eduLocation_${itemId}" name="eduLocation_${itemId}">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="eduGpa_${itemId}">GPA</label>
+                      <input type="text" id="eduGpa_${itemId}" name="eduGpa_${itemId}">
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="eduPercentage_${itemId}">Percentage</label>
+                      <input type="text" id="eduPercentage_${itemId}" name="eduPercentage_${itemId}">
+                    </div>
+                  </div>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
+                  <button type="button" class="btn btn-primary save-edit">Save</button>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'project':
+            itemContent = `
+              <div class="list-item-header">
+                <div class="list-item-title">New Project</div>
+                <div class="list-item-actions">
+                  <button type="button" class="list-item-btn edit"><i class="fas fa-edit"></i></button>
+                  <button type="button" class="list-item-btn delete"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="list-item-form hidden">
+                <div class="form-group">
+                  <label for="projTitle_${itemId}">Project Title*</label>
+                  <input type="text" id="projTitle_${itemId}" name="projTitle_${itemId}" required>
+                </div>
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="projDate_${itemId}">Date (optional)</label>
+                      <input type="text" id="projDate_${itemId}" name="projDate_${itemId}" placeholder="e.g., Jan 2023 - Mar 2023">
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="projLink_${itemId}">Project Link (optional)</label>
+                      <input type="url" id="projLink_${itemId}" name="projLink_${itemId}">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="projDescription_${itemId}">Description*</label>
+                  <textarea id="projDescription_${itemId}" name="projDescription_${itemId}" required></textarea>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
+                  <button type="button" class="btn btn-primary save-edit">Save</button>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'certification':
+            itemContent = `
+              <div class="list-item-header">
+                <div class="list-item-title">New Certification</div>
+                <div class="list-item-actions">
+                  <button type="button" class="list-item-btn edit"><i class="fas fa-edit"></i></button>
+                  <button type="button" class="list-item-btn delete"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="list-item-form hidden">
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="certName_${itemId}">Certification Name*</label>
+                      <input type="text" id="certName_${itemId}" name="certName_${itemId}" required>
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="certIssuer_${itemId}">Issuing Organization*</label>
+                      <input type="text" id="certIssuer_${itemId}" name="certIssuer_${itemId}" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="certDate_${itemId}">Date Earned (or Expected)</label>
+                      <input type="month" id="certDate_${itemId}" name="certDate_${itemId}">
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="certCredential_${itemId}">Credential ID/Link (optional)</label>
+                      <input type="text" id="certCredential_${itemId}" name="certCredential_${itemId}">
+                    </div>
+                  </div>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
+                  <button type="button" class="btn btn-primary save-edit">Save</button>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'achievement':
+            itemContent = `
+              <div class="list-item-header">
+                <div class="list-item-title">New Achievement</div>
+                <div class="list-item-actions">
+                  <button type="button" class="list-item-btn edit"><i class="fas fa-edit"></i></button>
+                  <button type="button" class="list-item-btn delete"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="list-item-form hidden">
+                <div class="form-group">
+                  <label for="achTitle_${itemId}">Achievement*</label>
+                  <input type="text" id="achTitle_${itemId}" name="achTitle_${itemId}" required>
+                </div>
+                <div class="form-group">
+                  <label for="achDate_${itemId}">Date (optional)</label>
+                  <input type="month" id="achDate_${itemId}" name="achDate_${itemId}">
+                </div>
+                <div class="form-group">
+                  <label for="achDescription_${itemId}">Description (optional)</label>
+                  <textarea id="achDescription_${itemId}" name="achDescription_${itemId}"></textarea>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
+                  <button type="button" class="btn btn-primary save-edit">Save</button>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'language':
+            itemContent = `
+              <div class="list-item-header">
+                <div class="list-item-title">New Language</div>
+                <div class="list-item-actions">
+                  <button type="button" class="list-item-btn edit"><i class="fas fa-edit"></i></button>
+                  <button type="button" class="list-item-btn delete"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="list-item-form hidden">
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="langLanguage_${itemId}">Language*</label>
+                      <input type="text" id="langLanguage_${itemId}" name="langLanguage_${itemId}" required>
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="langProficiency_${itemId}">Proficiency*</label>
+                      <select id="langProficiency_${itemId}" name="langProficiency_${itemId}" required>
+                        <option value="">Select proficiency</option>
+                        <option value="Native">Native</option>
+                        <option value="Fluent">Fluent</option>
+                        <option value="Advanced">Advanced</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Basic">Basic</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-secondary cancel-edit">Cancel</button>
+                  <button type="button" class="btn btn-primary save-edit">Save</button>
+                </div>
+              </div>
+            `;
+            break;
+        }
+        
+        item.innerHTML = itemContent;
+        
+        const editBtn = item.querySelector('.edit');
+        const deleteBtn = item.querySelector('.delete');
+        const cancelBtn = item.querySelector('.cancel-edit');
+        const saveBtn = item.querySelector('.save-edit');
+        const form = item.querySelector('.list-item-form');
+        
+        editBtn.addEventListener('click', () => {
+          form.classList.remove('hidden');
+        });
+        
+        deleteBtn.addEventListener('click', () => {
+          if (confirm('Are you sure you want to delete this item?')) {
+            item.remove();
+            updateProgress();
+          }
+        });
+        
+        cancelBtn.addEventListener('click', () => {
+          form.classList.add('hidden');
+        });
+        
+        saveBtn.addEventListener('click', () => {
+          const requiredInputs = form.querySelectorAll('[required]');
+          let isValid = true;
+          
+          requiredInputs.forEach(input => {
+            if (!input.value.trim()) {
+              isValid = false;
+              input.style.borderColor = 'red';
+            } else {
+              input.style.borderColor = '';
+            }
+          });
+          
+          if (isValid) {
+            const titleElement = item.querySelector('.list-item-title');
+            let newTitle = '';
+            
+            switch(type) {
+              case 'experience':
+                newTitle = `${form.querySelector(`#expPosition_${itemId}`).value} at ${form.querySelector(`#expCompany_${itemId}`).value}`;
+                break;
+              case 'education':
+                newTitle = `${form.querySelector(`#eduDegree_${itemId}`).value} from ${form.querySelector(`#eduInstitution_${itemId}`).value}`;
+                break;
+              case 'project':
+                newTitle = form.querySelector(`#projTitle_${itemId}`).value;
+                break;
+              case 'certification':
+                newTitle = `${form.querySelector(`#certName_${itemId}`).value} by ${form.querySelector(`#certIssuer_${itemId}`).value}`;
+                break;
+              case 'achievement':
+                newTitle = form.querySelector(`#achTitle_${itemId}`).value;
+                break;
+              case 'language':
+                newTitle = `${form.querySelector(`#langLanguage_${itemId}`).value} (${form.querySelector(`#langProficiency_${itemId}`).value})`;
+                break;
+            }
+            
+            titleElement.textContent = newTitle;
+            form.classList.add('hidden');
+            updateProgress();
+          }
+        });
+        
+        container.appendChild(item);
+        item.querySelector('.edit').click(); 
+      }
+      
+      document.getElementById('generateResume').addEventListener('click', async () => {
+        const formData = {
+          personalInfo: {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            linkedin: document.getElementById('linkedin').value,
+            github: document.getElementById('github').value,
+            portfolio: document.getElementById('portfolio').value,
+            address: document.getElementById('address').value,
+            currentRole: document.getElementById('currentRole').value
+          },
+          careerObjective: document.getElementById('careerObjective').value,
+          skills: skillsInput.value.split(',').map(skill => skill.trim()).filter(skill => skill),
+          experience: getListItemsData('experienceList', 'experience'),
+          education: getListItemsData('educationList', 'education'),
+          projects: getListItemsData('projectList', 'project'),
+          certifications: getListItemsData('certificationList', 'certification'),
+          achievements: getListItemsData('achievementList', 'achievement'),
+          languages: getListItemsData('languageList', 'language')
+        };
+        
+        if (!formData.personalInfo.name || !formData.personalInfo.email) {
+          alert('Name and email are required fields');
+          document.querySelector('[data-tab="personal"]').click();
+          return;
+        }
+        
+        const generateBtn = document.getElementById('generateResume');
+        const originalText = generateBtn.innerHTML;
+        generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        generateBtn.disabled = true;
+        
+        try {
+          const response = await fetch('/api/generate-resume', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to generate resume');
+          }
+          
+          const pdfBlob = await response.blob();
+          const pdfUrl = URL.createObjectURL(pdfBlob);
+          
+          document.getElementById('resumeForm').classList.add('hidden');
+          document.getElementById('previewContainer').classList.remove('hidden');
+          
+          document.getElementById('downloadResume').addEventListener('click', () => {
+            const a = document.createElement('a');
+            a.href = pdfUrl;
+            a.download = `${formData.personalInfo.name.replace(/\s+/g, '_')}_Resume.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          });
+          
+          document.getElementById('editResume').addEventListener('click', () => {
+            document.getElementById('resumeForm').classList.remove('hidden');
+            document.getElementById('previewContainer').classList.add('hidden');
+          });
+          
+        } catch (error) {
+          console.error('Error generating resume:', error);
+          alert('Failed to generate resume. Please try again.');
+        } finally {
+          generateBtn.innerHTML = originalText;
+          generateBtn.disabled = false;
+        }
+      });
+      
+      function getListItemsData(containerId, type) {
+        const container = document.getElementById(containerId);
+        const items = Array.from(container.querySelectorAll('.list-item'));
+        
+        return items.map(item => {
+          const itemId = item.dataset.id;
+          const form = item.querySelector('.list-item-form');
+          
+          switch(type) {
+            case 'experience':
+              return {
+                position: form.querySelector(`#expPosition_${itemId}`).value,
+                company: form.querySelector(`#expCompany_${itemId}`).value,
+                startDate: form.querySelector(`#expStartDate_${itemId}`).value,
+                endDate: form.querySelector(`#expEndDate_${itemId}`).value || 'Present',
+                location: form.querySelector(`#expLocation_${itemId}`).value,
+                responsibilities: form.querySelector(`#expResponsibilities_${itemId}`).value.split('\n').filter(line => line.trim() !== '')
+              };
+              
+            case 'education':
+              return {
+                degree: form.querySelector(`#eduDegree_${itemId}`).value,
+                institution: form.querySelector(`#eduInstitution_${itemId}`).value,
+                year: form.querySelector(`#eduYear_${itemId}`).value,
+                location: form.querySelector(`#eduLocation_${itemId}`).value,
+                gpa: form.querySelector(`#eduGpa_${itemId}`).value,
+                percentage: form.querySelector(`#eduPercentage_${itemId}`).value
+              };
+              
+            case 'project':
+              return {
+                title: form.querySelector(`#projTitle_${itemId}`).value,
+                date: form.querySelector(`#projDate_${itemId}`).value,
+                link: form.querySelector(`#projLink_${itemId}`).value,
+                description: form.querySelector(`#projDescription_${itemId}`).value
+              };
+              
+            case 'certification':
+              return {
+                name: form.querySelector(`#certName_${itemId}`).value,
+                issuer: form.querySelector(`#certIssuer_${itemId}`).value,
+                date: form.querySelector(`#certDate_${itemId}`).value,
+                credential: form.querySelector(`#certCredential_${itemId}`).value
+              };
+              
+            case 'achievement':
+              return form.querySelector(`#achTitle_${itemId}`).value;
+              
+            case 'language':
+              return {
+                language: form.querySelector(`#langLanguage_${itemId}`).value,
+                proficiency: form.querySelector(`#langProficiency_${itemId}`).value
+              };
+          }
+        });
+      }
+      
+      function updateProgress() {
+        const totalFields = 8; 
+        let completedFields = 0;
+        
+        if (document.getElementById('name').value) completedFields++;
+        if (document.getElementById('email').value) completedFields++;
+        
+        if (skillsInput.value.trim()) completedFields++;
+        
+        if (document.getElementById('experienceList').children.length > 0) completedFields++;
+        
+        if (document.getElementById('educationList').children.length > 0) completedFields++;
+        
+        if (document.getElementById('projectList').children.length > 0) completedFields++;
+        
+        if (document.getElementById('careerObjective').value) completedFields++;
+        
+        const progressPercentage = Math.min(Math.round((completedFields / totalFields) * 100), 100);
+        document.getElementById('progressBar').style.width = `${progressPercentage}%`;
+        document.getElementById('progressText').textContent = `${progressPercentage}% Complete`;
+      }
+      
+      document.querySelectorAll('input, textarea, select').forEach(element => {
+        element.addEventListener('input', updateProgress);
+      });
+      
+      updateProgress();
+    });
+  </script>
+</body>
+</html>
